@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Env & local
+.env
+.env.*
+!.env.example
+*.local
+
+# Internal tooling state
+.hermes/
+
+# Editor & OS
+.DS_Store
+*.log

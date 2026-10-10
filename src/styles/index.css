@@ -1,0 +1,162 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Design tokens — Family Mart Indonesia (PRD §8 + task-plan M1)
+   - Primary color: #0ea5e9 (arahan user, 10 Okt 2026)
+   - Token selain primary: approximation sampai brand guideline final.
+   - Semua komponen WAJIB memakai token di sini, bukan nilai acak.
+   ============================================================ */
+@theme {
+  /* Warna brand — primary */
+  --color-primary: #0ea5e9;
+  --color-primary-light: #38bdf8;
+  --color-primary-dark: #0284c7;
+  --color-primary-50: #f0f9ff;
+  --color-primary-100: #e0f2fe;
+  --color-primary-700: #0369a1;
+  --color-primary-900: #0c4a6e;
+
+  /* Hijau khas Family Mart — placeholder sampai brand guideline final */
+  --color-brand-green: #16a34a;
+  --color-brand-green-dark: #15803d;
+
+  /* Netral / surface */
+  --color-surface: #ffffff;
+  --color-surface-muted: #f0f9ff;
+  --color-ink: #0f172a;
+
+  /* Radius & shadow */
+  --radius-card: 1.25rem;
+  --shadow-card: 0 4px 16px rgb(2 132 199 / 0.1);
+  --shadow-lift: 0 16px 40px -12px rgb(2 132 199 / 0.28);
+
+  /* Tipografi: Plus Jakarta Sans (typeface karya desainer Indonesia —
+     cocok untuk FamilyMart Indonesia). 1 keluarga font (batas PRD: maks 2),
+     display=swap. Peran display = weight 800 + tracking ketat. */
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+
+  /* Easing khas untuk micro-interaction */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---------------------------------------------------------- */
+
+html {
+  scroll-padding-top: 5.5rem; /* offset anchor agar tak tertutup navbar */
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  @apply bg-surface font-sans text-ink antialiased;
+}
+
+::selection {
+  @apply bg-primary text-white;
+}
+
+/* Fokus terlihat jelas (WCAG) */
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* --- Awning stripe: pita garis hijau-putih-biru khas gerai --- */
+.awning {
+  background: repeating-linear-gradient(
+    180deg,
+    var(--color-brand-green) 0 8px,
+    var(--color-surface) 8px 12px,
+    var(--color-primary) 12px 20px,
+    var(--color-surface) 20px 24px
+  );
+}
+
+/* --- Scroll reveal (dipasang oleh komponen <Reveal/>) --- */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.7s var(--ease-out-expo),
+    transform 0.7s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* --- Marquee signage toko --- */
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee-x 28s linear infinite;
+  will-change: transform;
+}
+
+/* --- Dot "buka 24 jam" berdenyut --- */
+@keyframes pulse-dot {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(22 163 74 / 0.55);
+  }
+  50% {
+    box-shadow: 0 0 0 9px rgb(22 163 74 / 0);
+  }
+}
+.pulse-dot {
+  animation: pulse-dot 2.2s ease-in-out infinite;
+}
+
+/* --- Ghost rank number (Best Seller) --- */
+.text-outline {
+  -webkit-text-stroke: 2px var(--color-primary-100);
+  color: transparent;
+}
+
+/* --- Scrollbar disembunyikan untuk carousel horizontal --- */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- Penyesuaian Leaflet agar tidak menutupi navbar --- */
+.leaflet-container {
+  font-family: inherit;
+  z-index: 0;
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 1rem;
+  box-shadow: var(--shadow-card);
+}
+
+/* Hormati prefers-reduced-motion untuk semua animasi di atas */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .marquee-track,
+  .pulse-dot {
+    animation: none;
+  }
+  .marquee-track {
+    transform: none;
+  }
+}
